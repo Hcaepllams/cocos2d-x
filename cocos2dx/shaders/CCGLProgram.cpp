@@ -355,7 +355,7 @@ void CCGLProgram::setUniformLocationWith2i(GLint location, GLint i1, GLint i2)
     
     if( updated )
     {
-        glUniform2i( (GLint)location, i1, i2);
+//        glUniform2i( (GLint)location, i1, i2);
     }
 }
 
@@ -366,7 +366,7 @@ void CCGLProgram::setUniformLocationWith3i(GLint location, GLint i1, GLint i2, G
     
     if( updated )
     {
-        glUniform3i( (GLint)location, i1, i2, i3);
+ //       glUniform3i( (GLint)location, i1, i2, i3);
     }
 }
 
@@ -377,7 +377,7 @@ void CCGLProgram::setUniformLocationWith4i(GLint location, GLint i1, GLint i2, G
     
     if( updated )
     {
-        glUniform4i( (GLint)location, i1, i2, i3, i4);
+ //       glUniform4i( (GLint)location, i1, i2, i3, i4);
     }
 }
 
@@ -387,7 +387,7 @@ void CCGLProgram::setUniformLocationWith2iv(GLint location, GLint* ints, unsigne
     
     if( updated )
     {
-        glUniform2iv( (GLint)location, (GLsizei)numberOfArrays, ints );
+//        glUniform2iv( (GLint)location, (GLsizei)numberOfArrays, ints );
     }
 }
 
@@ -397,7 +397,7 @@ void CCGLProgram::setUniformLocationWith3iv(GLint location, GLint* ints, unsigne
     
     if( updated )
     {
-        glUniform3iv( (GLint)location, (GLsizei)numberOfArrays, ints );
+//        glUniform3iv( (GLint)location, (GLsizei)numberOfArrays, ints );
     }
 }
 
@@ -407,7 +407,7 @@ void CCGLProgram::setUniformLocationWith4iv(GLint location, GLint* ints, unsigne
     
     if( updated )
     {
-        glUniform4iv( (GLint)location, (GLsizei)numberOfArrays, ints );
+//        glUniform4iv( (GLint)location, (GLsizei)numberOfArrays, ints );
     }
 }
 

@@ -156,18 +156,19 @@ void CCEGLViewProtocol::setScissorInPoints(float x , float y , float w , float h
 
 bool CCEGLViewProtocol::isScissorEnabled()
 {
-	return glIsEnabled(GL_SCISSOR_TEST);
+	return false;//glIsEnabled(GL_SCISSOR_TEST);
 }
 
 CCRect CCEGLViewProtocol::getScissorRect()
 {
-	GLfloat params[4];
-	glGetFloatv(GL_SCISSOR_BOX, params);
-	float x = (params[0] - m_obViewPortRect.origin.x) / m_fScaleX;
-	float y = (params[1] - m_obViewPortRect.origin.y) / m_fScaleY;
-	float w = params[2] / m_fScaleX;
-	float h = params[3] / m_fScaleY;
-	return CCRectMake(x, y, w, h);
+// 	GLfloat params[4];
+// 	glGetFloatv(GL_SCISSOR_BOX, params);
+// 	float x = (params[0] - m_obViewPortRect.origin.x) / m_fScaleX;
+// 	float y = (params[1] - m_obViewPortRect.origin.y) / m_fScaleY;
+// 	float w = params[2] / m_fScaleX;
+// 	float h = params[3] / m_fScaleY;
+// 	return CCRectMake(x, y, w, h);
+    return CCRectMake(0, 0, 0, 0);
 }
 
 void CCEGLViewProtocol::setViewName(const char* pszViewName)
