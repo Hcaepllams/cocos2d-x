@@ -32,6 +32,7 @@ using namespace Windows::Foundation;
 using namespace Microsoft::WRL;
 
 
+
 #if WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
 typedef FTTextPainter TextPainter;
 #else
@@ -39,9 +40,7 @@ typedef DXTextPainter TextPainter;
 using namespace D2D1;
 #endif
 
-
-USING_NS_CC;
-
+NS_CC_BEGIN
 
 static CCPoint getCCPointFromScreen(Point point)
 {
@@ -696,3 +695,5 @@ void DirectXRender::OnCharacterReceived(
 {
 	cocos2d::CCEGLView::sharedOpenGLView()->OnCharacterReceived(args->KeyCode);
 }
+
+NS_CC_END

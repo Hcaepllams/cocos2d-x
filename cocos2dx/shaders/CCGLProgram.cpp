@@ -135,7 +135,7 @@ const char* CCGLProgram::description()
 
 bool CCGLProgram::compileShader(GLuint * shader, GLenum type, const GLchar* source)
 {
-    GLint status;
+    GLint status = 0;
  
     if (!source)
     {

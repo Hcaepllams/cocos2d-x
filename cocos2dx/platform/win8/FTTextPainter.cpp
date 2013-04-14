@@ -39,6 +39,13 @@ FTTextPainter::FTTextPainter() : m_textLibrary(0), m_fontSize(10), m_fontName(re
 	BuildFontsInformation();
 }
 
+FTTextPainter::~FTTextPainter()
+{
+    m_fontMap.clear();
+    if(m_fontFace != nullptr) FT_Done_Face(m_fontFace);
+    if(m_textLibrary != nullptr) FT_Done_FreeType(m_textLibrary);
+}
+
 Platform::Array<byte>^ FTTextPainter::DrawTextToImage(Platform::String^ text, Windows::Foundation::Size* tSize, TextAlignment alignment)
 {
 	if(text->Length() == 0) return nullptr;

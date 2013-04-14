@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloCpp", "HelloCpp.vcxproj", "{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09} = {E41862F3-C9E2-4E23-947C-EBDC0B002B09}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcocos2d", "..\..\..\..\cocos2dx\proj.win8\libcocos2d.vcxproj", "{E41862F3-C9E2-4E23-947C-EBDC0B002B09}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ARM = Debug|ARM
+		Debug|Win32 = Debug|Win32
+		Release|ARM = Release|ARM
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|ARM.ActiveCfg = Debug|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|ARM.Build.0 = Debug|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|ARM.Deploy.0 = Debug|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|Win32.Build.0 = Debug|Win32
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Debug|Win32.Deploy.0 = Debug|Win32
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|ARM.ActiveCfg = Release|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|ARM.Build.0 = Release|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|ARM.Deploy.0 = Release|ARM
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|Win32.ActiveCfg = Release|Win32
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|Win32.Build.0 = Release|Win32
+		{100660C2-E0EB-4AEC-8DF5-DE0AE7D5C2D2}.Release|Win32.Deploy.0 = Release|Win32
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Debug|ARM.ActiveCfg = Debug|ARM
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Debug|ARM.Build.0 = Debug|ARM
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Debug|Win32.ActiveCfg = Debug|Win32
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Debug|Win32.Build.0 = Debug|Win32
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Release|ARM.ActiveCfg = Release|ARM
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Release|ARM.Build.0 = Release|ARM
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Release|Win32.ActiveCfg = Release|Win32
+		{E41862F3-C9E2-4E23-947C-EBDC0B002B09}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

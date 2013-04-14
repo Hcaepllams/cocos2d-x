@@ -61,21 +61,27 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_USRDLL;CC_WIN8;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USRDLL;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_WINRT_DLL;CC_WIN8;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <CompileAsWinRT>false</CompileAsWinRT>
+      <CompileAsWinRT>true</CompileAsWinRT>
       <AdditionalUsingDirectories>$(WindowsSDK_MetadataPath);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
-      <AdditionalIncludeDirectories>$(ProjectDir)..;..\include;$(ProjectDir)..\kazmath\include;$(ProjectDir)..\platform\win8;$(ProjectDir)..\platform\third_party\win8;$(ProjectDir)..\platform\third_party\win8\freetype;$(ProjectDir)..\platform\third_party\win8\libjpeg;$(ProjectDir)..\platform\third_party\win8\libpng;$(ProjectDir)..\platform\third_party\win8\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..;..\include;$(ProjectDir)..\kazmath\include;$(ProjectDir)..\platform\win8;$(ProjectDir)..\platform\third_party\win8\freetype;$(ProjectDir)..\platform\third_party\win8\libjpeg;$(ProjectDir)..\platform\third_party\win8\libpng;$(ProjectDir)..\platform\third_party\win8\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MinimalRebuild>false</MinimalRebuild>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
+      <GenerateWindowsMetadata>true</GenerateWindowsMetadata>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib;ole32.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <AdditionalDependencies>d3d11.lib;$(ProjectDir)..\platform\third_party\win8\libraries\x86\zlib.lib;$(ProjectDir)..\platform\third_party\win8\libraries\x86\libpng.lib;$(ProjectDir)..\platform\third_party\win8\libraries\x86\libjpeg.lib;$(ProjectDir)..\platform\third_party\win8\libraries\x86\freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <WindowsMetadataFile>
+      </WindowsMetadataFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

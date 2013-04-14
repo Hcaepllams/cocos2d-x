@@ -35,12 +35,7 @@
 #include <XInput.h>
 #include "DirectXHelper.h"
 
-// forward declare
-
-NS_CC_BEGIN;
-
-class CCEGLView;
-class CCImage;
+NS_CC_BEGIN
 
 // Helper class that initializes the DirectX APIs in the sample apps.
 public ref class DirectXRender sealed
@@ -68,10 +63,8 @@ private:
 	bool SetRasterState();
 
 private:
-	friend class cocos2d::CCEGLView;
-	friend class cocos2d::CCImage;
-
-
+    friend class CCImage;
+    friend class CCEGLView;
 #if WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP
 	FTTextPainter^									m_textPainter;
 #else
@@ -139,4 +132,5 @@ protected:
 		);
 
 };
-NS_CC_END;
+
+NS_CC_END
