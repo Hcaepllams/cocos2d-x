@@ -128,7 +128,7 @@ NotificationCenterTest::NotificationCenterTest()
     }
 
     EventCustom event(MSG_SWITCH_STATE);
-    event.setUserData((void*)item->getSelectedIndex());
+    event.setUserData((void*)(intptr_t)item->getSelectedIndex());
 
     EventDispatcher::getInstance()->dispatchEvent(&event);
 }
@@ -145,7 +145,7 @@ void NotificationCenterTest::toggleSwitch(Object *sender)
     auto item = (MenuItemToggle*)sender;
     
     EventCustom event(MSG_SWITCH_STATE);
-    event.setUserData((void*)item->getSelectedIndex());
+    event.setUserData((void*)(intptr_t)item->getSelectedIndex());
     
     EventDispatcher::getInstance()->dispatchEvent(&event);
 }
