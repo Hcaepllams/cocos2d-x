@@ -131,19 +131,10 @@ NotificationCenterTest::NotificationCenterTest()
     event.setUserData((void*)item->getSelectedIndex());
 
     EventDispatcher::getInstance()->dispatchEvent(&event);
-
-    /* for testing removeAllObservers */
-//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer1", NULL);
-//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer2", NULL);
-//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer3", NULL);
 }
 
 void NotificationCenterTest::toExtensionsMainLayer(cocos2d::Object* sender)
 {
-    /* for testing removeAllObservers */
-//    int CC_UNUSED numObserversRemoved = NotificationCenter::getInstance()->removeAllObservers(this);
-//    CCASSERT(numObserversRemoved >= 3, "All observers were not removed!");
-
     auto scene = new ExtensionsTestScene();
     scene->runThisTest();
     scene->release();
