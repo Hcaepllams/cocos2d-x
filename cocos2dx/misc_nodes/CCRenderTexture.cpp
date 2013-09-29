@@ -34,11 +34,12 @@ THE SOFTWARE.
 #include "textures/CCTextureCache.h"
 #include "platform/CCFileUtils.h"
 #include "CCGL.h"
-#include "support/CCNotificationCenter.h"
 #include "CCEventType.h"
 #include "effects/CCGrid.h"
 // extern
 #include "kazmath/GL/matrix.h"
+#include "event_dispatcher/CCEventListenerCustom.h"
+#include "event_dispatcher/CCEventDispatcher.h"
 
 NS_CC_BEGIN
 
@@ -61,15 +62,12 @@ RenderTexture::RenderTexture()
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Listen this event to save render texture before come to background.
     // Then it can be restored after coming to foreground on Android.
-    NotificationCenter::getInstance()->addObserver(this,
-                                                                  callfuncO_selector(RenderTexture::listenToBackground),
-                                                                  EVENT_COME_TO_BACKGROUND,
-                                                                  NULL);
     
-    NotificationCenter::getInstance()->addObserver(this,
-                                                                  callfuncO_selector(RenderTexture::listenToForeground),
-                                                                  EVNET_COME_TO_FOREGROUND, // this is misspelt
-                                                                  NULL);
+    auto toBackgroundListener = EventListenerCustom::create(EVENT_COME_TO_BACKGROUND, CC_CALLBACK_1(RenderTexture::listenToBackground, this));
+    EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(toBackgroundListener, this);
+    
+    auto toForegroundListener = EventListenerCustom::create(EVNET_COME_TO_FOREGROUND, CC_CALLBACK_1(RenderTexture::listenToForeground, this));
+    EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(toForegroundListener, this);
 #endif
 }
 
@@ -84,14 +82,9 @@ RenderTexture::~RenderTexture()
         glDeleteRenderbuffers(1, &_depthRenderBufffer);
     }
     CC_SAFE_DELETE(_UITextureImage);
-
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    NotificationCenter::getInstance()->removeObserver(this, EVENT_COME_TO_BACKGROUND);
-    NotificationCenter::getInstance()->removeObserver(this, EVNET_COME_TO_FOREGROUND);
-#endif
 }
 
-void RenderTexture::listenToBackground(cocos2d::Object *obj)
+void RenderTexture::listenToBackground(EventCustom* event)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     CC_SAFE_DELETE(_UITextureImage);
@@ -119,7 +112,7 @@ void RenderTexture::listenToBackground(cocos2d::Object *obj)
 #endif
 }
 
-void RenderTexture::listenToForeground(cocos2d::Object *obj)
+void RenderTexture::listenToForeground(EventCustom* event)
 {
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // -- regenerate frame buffer object and attach the texture

@@ -1,6 +1,5 @@
 #include "NotificationCenterTest.h"
 #include "../ExtensionsTest.h"
-#include "support/CCNotificationCenter.h"
 
 #define kTagLight 100
 #define kTagConnect 200
@@ -15,29 +14,30 @@ public:
     Light();
     ~Light();
 
-    static Light* lightWithFile(const char* name);
+    static Light* create(const char* name);
 
     void setIsConnectToSwitch(bool bConnectToSwitch);
-    void switchStateChanged(Object* obj);
     void updateLightState();
 
 private:
     bool _connected;
+    EventListenerCustom* _listener;
     static bool s_bSwitchOn;
 };
 
-bool Light::s_bSwitchOn = false;
+bool Light::s_bSwitchOn = true;
 
 Light::Light()
-    : _connected(false)
+ : _connected(false)
+ , _listener(nullptr)
 {}
 
 Light::~Light()
 {
-    NotificationCenter::getInstance()->removeObserver(this, MSG_SWITCH_STATE);
+    EventDispatcher::getInstance()->removeEventListener(_listener);
 }
 
-Light* Light::lightWithFile(const char* name)
+Light* Light::create(const char* name)
 {
     Light* pLight = new Light();
     pLight->initWithFile(name);
@@ -48,22 +48,23 @@ Light* Light::lightWithFile(const char* name)
 void Light::setIsConnectToSwitch(bool bConnectToSwitch)
 {
     _connected = bConnectToSwitch;
+    
+    EventDispatcher::getInstance()->removeEventListener(_listener);
+    
     if (_connected)
     {
-        NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(Light::switchStateChanged), MSG_SWITCH_STATE, NULL);
+        _listener = EventListenerCustom::create(MSG_SWITCH_STATE, [this](EventCustom* event){
+            int userData = (intptr_t)event->getUserData();
+            s_bSwitchOn = userData == 0x00 ? false : true;
+            updateLightState();
+        });
+        
+        EventDispatcher::getInstance()->addEventListenerWithFixedPriority(_listener, -1);
     }
-    else
-    {
-        NotificationCenter::getInstance()->removeObserver(this, MSG_SWITCH_STATE);
-    }
+
     updateLightState();
 }
 
-void Light::switchStateChanged(Object* obj)
-{
-    s_bSwitchOn = obj == 0x00 ? false : true;
-    updateLightState();
-}
 
 void Light::updateLightState()
 {
@@ -105,7 +106,7 @@ NotificationCenterTest::NotificationCenterTest()
 
     for (int i = 1; i <= 3; i++)
     {
-        Light* light = Light::lightWithFile("Images/Pea.png");
+        Light* light = Light::create("Images/Pea.png");
         light->setTag(kTagLight+i);
         light->setPosition(Point(100, s.height/4*i));
         addChild(light);
@@ -126,19 +127,22 @@ NotificationCenterTest::NotificationCenterTest()
         light->setIsConnectToSwitch(bConnected);
     }
 
-    NotificationCenter::getInstance()->postNotification(MSG_SWITCH_STATE, (Object*)(intptr_t)item->getSelectedIndex());
+    EventCustom event(MSG_SWITCH_STATE);
+    event.setUserData((void*)item->getSelectedIndex());
+
+    EventDispatcher::getInstance()->dispatchEvent(&event);
 
     /* for testing removeAllObservers */
-    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer1", NULL);
-    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer2", NULL);
-    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer3", NULL);
+//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer1", NULL);
+//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer2", NULL);
+//    NotificationCenter::getInstance()->addObserver(this, callfuncO_selector(NotificationCenterTest::doNothing), "random-observer3", NULL);
 }
 
 void NotificationCenterTest::toExtensionsMainLayer(cocos2d::Object* sender)
 {
     /* for testing removeAllObservers */
-    int CC_UNUSED numObserversRemoved = NotificationCenter::getInstance()->removeAllObservers(this);
-    CCASSERT(numObserversRemoved >= 3, "All observers were not removed!");
+//    int CC_UNUSED numObserversRemoved = NotificationCenter::getInstance()->removeAllObservers(this);
+//    CCASSERT(numObserversRemoved >= 3, "All observers were not removed!");
 
     auto scene = new ExtensionsTestScene();
     scene->runThisTest();
@@ -148,8 +152,11 @@ void NotificationCenterTest::toExtensionsMainLayer(cocos2d::Object* sender)
 void NotificationCenterTest::toggleSwitch(Object *sender)
 {
     auto item = (MenuItemToggle*)sender;
-    int index = item->getSelectedIndex();
-    NotificationCenter::getInstance()->postNotification(MSG_SWITCH_STATE, (Object*)(intptr_t)index);
+    
+    EventCustom event(MSG_SWITCH_STATE);
+    event.setUserData((void*)item->getSelectedIndex());
+    
+    EventDispatcher::getInstance()->dispatchEvent(&event);
 }
 
 void NotificationCenterTest::connectToSwitch(Object *sender)

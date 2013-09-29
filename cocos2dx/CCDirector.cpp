@@ -37,7 +37,6 @@ THE SOFTWARE.
 #include "cocoa/CCArray.h"
 #include "CCScheduler.h"
 #include "ccMacros.h"
-#include "support/CCNotificationCenter.h"
 #include "layers_scenes_transitions_nodes/CCTransition.h"
 #include "textures/CCTextureCache.h"
 #include "sprite_nodes/CCSpriteFrameCache.h"
@@ -696,7 +695,6 @@ void Director::purgeDirector()
 
     // cocos2d-x specific data structures
     UserDefault::destroyInstance();
-    NotificationCenter::destroyInstance();
     EventDispatcher::destroyInstance();
     
     GL::invalidateStateCache();

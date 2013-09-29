@@ -30,13 +30,14 @@ THE SOFTWARE.
 #include "ccMacros.h"
 #include "shaders/CCGLProgram.h"
 #include "shaders/ccGLStateCache.h"
-#include "support/CCNotificationCenter.h"
 #include "CCEventType.h"
 #include "CCGL.h"
 // support
 #include "CCTexture2D.h"
 #include "cocoa/CCString.h"
 #include <stdlib.h>
+#include "event_dispatcher/CCEventDispatcher.h"
+#include "event_dispatcher/CCEventListenerCustom.h"
 
 //According to some tests GL_TRIANGLE_STRIP is slower, MUCH slower. Probably I'm doing something very wrong
 
@@ -67,7 +68,7 @@ TextureAtlas::~TextureAtlas()
     CC_SAFE_RELEASE(_texture);
     
 #if CC_ENABLE_CACHE_TEXTURE_DATA
-    NotificationCenter::getInstance()->removeObserver(this, EVNET_COME_TO_FOREGROUND);
+    EventDispatcher::getInstance()->removeEventListener(_backToForegroundlistener);
 #endif
 }
 
@@ -182,10 +183,8 @@ bool TextureAtlas::initWithTexture(Texture2D *texture, int capacity)
     
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // listen the event when app go to background
-    NotificationCenter::getInstance()->addObserver(this,
-                                                           callfuncO_selector(TextureAtlas::listenBackToForeground),
-                                                           EVNET_COME_TO_FOREGROUND,
-                                                           NULL);
+    _backToForegroundlistener = EventListenerCustom::create(EVNET_COME_TO_FOREGROUND, CC_CALLBACK_1(TextureAtlas::listenBackToForeground, this));
+    EventDispatcher::getInstance()->addEventListenerWithFixedPriority(_backToForegroundlistener, -1);
 #endif
     
     this->setupIndices();
@@ -201,7 +200,7 @@ bool TextureAtlas::initWithTexture(Texture2D *texture, int capacity)
     return true;
 }
 
-void TextureAtlas::listenBackToForeground(Object *obj)
+void TextureAtlas::listenBackToForeground(EventCustom* event)
 {  
 #if CC_TEXTURE_ATLAS_USE_VAO
     setupVBOandVAO();    

@@ -23,8 +23,9 @@
 #include "CCDrawNode.h"
 #include "shaders/CCShaderCache.h"
 #include "CCGL.h"
-#include "support/CCNotificationCenter.h"
 #include "CCEventType.h"
+#include "event_dispatcher/CCEventListenerCustom.h"
+#include "event_dispatcher/CCEventDispatcher.h"
 
 NS_CC_BEGIN
 
@@ -119,10 +120,7 @@ DrawNode::~DrawNode()
     GL::bindVAO(0);
     _vao = 0;
 #endif
-    
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    NotificationCenter::getInstance()->removeObserver(this, EVNET_COME_TO_FOREGROUND);
-#endif
+
 }
 
 DrawNode* DrawNode::create()
@@ -186,13 +184,15 @@ bool DrawNode::init()
     CHECK_GL_ERROR_DEBUG();
     
     _dirty = true;
-    
+
 #if CC_ENABLE_CACHE_TEXTURE_DATA
     // Need to listen the event only when not use batchnode, because it will use VBO
-    NotificationCenter::getInstance()->addObserver(this,
-                                                   callfuncO_selector(DrawNode::listenBackToForeground),
-                                                   EVNET_COME_TO_FOREGROUND,
-                                                   NULL);
+    auto listener = EventListenerCustom::create(EVNET_COME_TO_FOREGROUND, [this](EventCustom* event){
+        /** listen the event that coming to foreground on Android */
+        this->init();
+    });
+    
+    EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
     
     return true;
@@ -451,13 +451,6 @@ const BlendFunc& DrawNode::getBlendFunc() const
 void DrawNode::setBlendFunc(const BlendFunc &blendFunc)
 {
     _blendFunc = blendFunc;
-}
-
-/** listen the event that coming to foreground on Android
- */
-void DrawNode::listenBackToForeground(Object *obj)
-{
-    init();
 }
 
 NS_CC_END

@@ -88,12 +88,6 @@ public:
     * @lua NA
     */
     void setBlendFunc(const BlendFunc &blendFunc);
-    
-    /** listen the event that coming to foreground on Android
-    * @js NA
-    * @lua NA
-    */
-    void listenBackToForeground(Object *obj);
 
     // Overrides
     virtual void draw() override;

@@ -35,11 +35,12 @@ THE SOFTWARE.
 #include "shaders/ccGLStateCache.h"
 #include "shaders/CCGLProgram.h"
 #include "support/TransformUtils.h"
-#include "support/CCNotificationCenter.h"
 #include "CCEventType.h"
 
 // extern
 #include "kazmath/GL/matrix.h"
+#include "event_dispatcher/CCEventListenerCustom.h"
+#include "event_dispatcher/CCEventDispatcher.h"
 
 NS_CC_BEGIN
 
@@ -67,10 +68,8 @@ bool ParticleSystemQuad::initWithTotalParticles(unsigned int numberOfParticles)
         
 #if CC_ENABLE_CACHE_TEXTURE_DATA
         // Need to listen the event only when not use batchnode, because it will use VBO
-        NotificationCenter::getInstance()->addObserver(this,
-                                                                      callfuncO_selector(ParticleSystemQuad::listenBackToForeground),
-                                                                      EVNET_COME_TO_FOREGROUND,
-                                                                      NULL);
+        auto listener = EventListenerCustom::create(EVNET_COME_TO_FOREGROUND, CC_CALLBACK_1(ParticleSystemQuad::listenBackToForeground, this));
+        EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(listener, this);
 #endif
 
         return true;
@@ -100,10 +99,6 @@ ParticleSystemQuad::~ParticleSystemQuad()
         GL::bindVAO(0);
 #endif
     }
-    
-#if CC_ENABLE_CACHE_TEXTURE_DATA
-    NotificationCenter::getInstance()->removeObserver(this, EVNET_COME_TO_FOREGROUND);
-#endif
 }
 
 // implementation ParticleSystemQuad
@@ -529,7 +524,7 @@ void ParticleSystemQuad::setupVBO()
 
 #endif
 
-void ParticleSystemQuad::listenBackToForeground(Object *obj)
+void ParticleSystemQuad::listenBackToForeground(EventCustom* event)
 {
 #if CC_TEXTURE_ATLAS_USE_VAO
         setupVBOandVAO();

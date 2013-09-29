@@ -125,7 +125,6 @@ public:
     bool initWithTexture(Texture2D* texture, const Rect&  rect);
     void draw();
     void initProgram();
-    void listenBackToForeground(Object *obj);
     
 protected:
     virtual void buildCustomUniforms() = 0;
@@ -141,24 +140,19 @@ ShaderSprite::ShaderSprite()
 
 ShaderSprite::~ShaderSprite()
 {
-    NotificationCenter::getInstance()->removeObserver(this, EVNET_COME_TO_FOREGROUND);
-}
-
-void ShaderSprite::listenBackToForeground(Object *obj)
-{
-    setShaderProgram(NULL);
-    initProgram();
 }
 
 bool ShaderSprite::initWithTexture(Texture2D* texture, const Rect& rect)
 {
     if( Sprite::initWithTexture(texture, rect) )
     {
-        NotificationCenter::getInstance()->addObserver(this,
-                                                       callfuncO_selector(ShaderSprite::listenBackToForeground),
-                                                       EVNET_COME_TO_FOREGROUND,
-                                                       NULL);
-        
+#if CC_ENABLE_CACHE_TEXTURE_DATA
+        auto listener = EventListenerCustom::create(EVNET_COME_TO_FOREGROUND, [this](EventCustom* event){
+            setShaderProgram(NULL);
+            initProgram();
+        });
+        EventDispatcher::getInstance()->addEventListenerWithSceneGraphPriority(listener, this);
+#endif
         this->initProgram();
         
         return true;
